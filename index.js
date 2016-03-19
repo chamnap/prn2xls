@@ -40,8 +40,94 @@ module.exports = function(path) {
     }
   };
 
-  var parseLineItems = function(content) {
+  var getLineItems = function(content) {
+    var lines = content.split("\n");
 
+    var start = null;
+    for(var i=0; i<lines.length; i++) {
+      var line = lines[i].trim();
+      if (line == '_______________________________________________________________________') {
+        start = i + 4;
+        break;
+      }
+    }
+
+    var lineItems = [];
+    for(var i=start; i<lines.length; i++) {
+      var line = lines[i].trim();
+      if (line.indexOf('Total  :') != -1) {
+        break;
+      }
+
+      var lineItem = parseLineItem(line);
+      if (lineItem) {
+        lineItems.push(lineItem);
+      }
+    }
+
+    return lineItems;
+  }
+
+  var parseLineItem = function(line) {
+    var attributes = { lineItem: null, codeItem: null, description: null, spot: null, amount: null };
+    var values = line.split(/\s{3,}/);
+
+    if (values.length == 6) {
+      attributes.lineItem     = values[0];
+      attributes.codeItem     = values[1];
+      attributes.description  = values[2];
+      attributes.spot         = values[3];
+      attributes.amount       = values[4];
+    } else if(values.length == 5) {
+      attributes.lineItem     = values[0];
+      attributes.codeItem     = values[1];
+      attributes.description  = values[2];
+      attributes.spot         = values[3];
+
+      if (values[4].match(/\.|,/).length > 0) {
+        attributes.amount = values[4];
+      }
+    } else if (values.length == 4) {
+      if (!isNaN(parseInt(values[0]))) {
+        attributes.lineItem = values[0];
+      }
+
+      if (values[1].indexOf(' ') == -1) {
+        attributes.codeItem = values[1];
+      }
+
+      if (values[2].indexOf(' ') != -1) {
+        attributes.description = values[2];
+      }
+
+      if (!isNaN(parseInt(values[3]))) {
+        attributes.spot = values[3];
+      }
+    } else if (values.length == 3) {
+      if (values[0].indexOf(' ') == -1) {
+        attributes.codeItem = values[0];
+      }
+
+      if (values[1].indexOf(' ') != -1) {
+        attributes.description = values[1];
+      }
+
+      if (values[2].match(/\.|,/).length > 0) {
+        attributes.amount = values[2];
+      }
+    } else if (values.length == 2) {
+      if (values[0] == '-') {
+        attributes.codeItem = values[0];
+      }
+
+      if (values[1].indexOf(' ') != -1) {
+        attributes.description = values[1];
+      }
+    } else if (values.length <= 1) {
+      return null;
+    }
+
+    return attributes;
   };
 
   var matchBeforeContent = function(content, before) {
@@ -115,7 +201,8 @@ module.exports = function(path) {
       number: accountNumber,
       bank_name: bankName,
       swift_code: swiftCode
-    }
+    },
+    lineItems: getLineItems(content)
   };
 
   return attributes;

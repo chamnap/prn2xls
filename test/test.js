@@ -105,4 +105,68 @@ describe('#Parser', function() {
     var parser = Parser(path);
     expect(parser.account.swift_code).to.equal('ANZBKHPP');
   });
+
+  describe('#lineItems', function() {
+    it('have 6 rows', function() {
+      var parser = Parser(path);
+
+      expect(parser.lineItems.length).to.equal(7);
+    });
+
+    it('#first', function() {
+      var parser = Parser(path);
+      var lineItem = parser.lineItems[0];
+
+      expect(lineItem.lineItem).to.equal(null);
+      expect(lineItem.codeItem).to.equal('-');
+      expect(lineItem.description).to.equal('Bacchus Ads Feb 16');
+      expect(lineItem.spot).to.equal(null);
+      expect(lineItem.amount).to.equal(null);
+    });
+
+    it('#second', function() {
+      var parser = Parser(path);
+      var lineItem = parser.lineItems[1];
+      console.log(lineItem);
+
+      expect(lineItem.lineItem).to.equal(null);
+      expect(lineItem.codeItem).to.equal('I99003');
+      expect(lineItem.description).to.equal('Package as per contract');
+      expect(lineItem.spot).to.equal(null);
+      expect(lineItem.amount).to.equal('727.27');
+    });
+
+    it('#third', function() {
+      var parser = Parser(path);
+      var lineItem = parser.lineItems[2];
+
+      expect(lineItem.lineItem).to.equal('006');
+      expect(lineItem.codeItem).to.equal('I10A2512');
+      expect(lineItem.description).to.equal('SP Package-25s 1200-1300');
+      expect(lineItem.spot).to.equal('17');
+      expect(lineItem.amount).to.equal('1,000.00');
+    });
+
+    it('#fifth', function() {
+      var parser = Parser(path);
+      var lineItem = parser.lineItems[4];
+
+      expect(lineItem.lineItem).to.equal('008');
+      expect(lineItem.codeItem).to.equal('I10A4520');
+      expect(lineItem.description).to.equal('SP Package-45s 2000-2100');
+      expect(lineItem.spot).to.equal('14');
+      expect(lineItem.amount).to.equal(null);
+    });
+
+    it('#seventh', function() {
+      var parser = Parser(path);
+      var lineItem = parser.lineItems[6];
+
+      expect(lineItem.lineItem).to.equal('010');
+      expect(lineItem.codeItem).to.equal('I10A6520');
+      expect(lineItem.description).to.equal('SP Package-65s 2000-2100');
+      expect(lineItem.spot).to.equal('7');
+      expect(lineItem.amount).to.equal('2,000.00');
+    });
+  });
 });
