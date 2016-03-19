@@ -84,7 +84,7 @@ module.exports = function(path) {
       attributes.description  = values[2];
       attributes.spot         = values[3];
 
-      if (values[4].match(/\.|,/).length > 0) {
+      if (values[4].match(/\.|,/)) {
         attributes.amount = values[4];
       }
     } else if (values.length == 4) {
@@ -112,7 +112,7 @@ module.exports = function(path) {
         attributes.description = values[1];
       }
 
-      if (values[2].match(/\.|,/).length > 0) {
+      if (values[2].match(/\.|,/)) {
         attributes.amount = values[2];
       }
     } else if (values.length == 2) {

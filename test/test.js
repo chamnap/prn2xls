@@ -110,7 +110,7 @@ describe('#Parser', function() {
     it('have 6 rows', function() {
       var parser = Parser(path);
 
-      expect(parser.lineItems.length).to.equal(7);
+      expect(parser.lineItems.length).to.equal(8);
     });
 
     it('#first', function() {
@@ -167,6 +167,17 @@ describe('#Parser', function() {
       expect(lineItem.description).to.equal('SP Package-65s 2000-2100');
       expect(lineItem.spot).to.equal('7');
       expect(lineItem.amount).to.equal('2,000.00');
+    });
+
+    it('#eight', function() {
+      var parser = Parser(path);
+      var lineItem = parser.lineItems[7];
+
+      expect(lineItem.lineItem).to.equal('011');
+      expect(lineItem.codeItem).to.equal('I10A8520');
+      expect(lineItem.description).to.equal('SP Package-85s 2000-2100');
+      expect(lineItem.spot).to.equal('7');
+      expect(lineItem.amount).to.equal(null);
     });
   });
 });
