@@ -28,6 +28,6 @@ module.exports.convert = function(source, destinationDirectory, callback) {
       return workbook.xlsx.writeFile(newFilePath);
     })
     .then(function() {
-      callback(nil, newFilePath);
+      callback(null, newFilePath);
     });
 };
