@@ -7,6 +7,7 @@ var prn2xls = require('./index.js');
 program
   .version('0.1.0')
   .option('-p, --path [value]',             'full path of prn file, eg: PI1105.PRN')
+  .option('-d, --directory [value]',        'destination directory')
   .option('-v, --verbose [value]',          'verbose mode')
   .parse(process.argv);
 
@@ -15,4 +16,4 @@ if (extName != '.PRN') {
   throw new Error("The source file must be .PRN file.");
 }
 
-prn2xls.process(program.path);
+prn2xls.process(program.path, program.directory);

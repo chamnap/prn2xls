@@ -1,6 +1,8 @@
 'use strict';
 
-module.exports.process = function(source) {
+module.exports.process = function(source, destinationDirectory) {
+  var destinationDirectory = destinationDirectory || __dirname;
+
   // require libs
   var fse       = require('node-fs-extra');
   var Excel     = require('exceljs');
@@ -10,7 +12,7 @@ module.exports.process = function(source) {
 
   // copy from sample
   var sampleFilePath = __dirname + '/sample.xlsx';
-  var newFilePath    = __dirname + '/' + path.basename(source, '.PRN') + '.xlsx';
+  var newFilePath    = destinationDirectory + '/' + path.basename(source, '.PRN') + '.xlsx';
   fse.copySync(sampleFilePath, newFilePath);
 
   // exceljs
