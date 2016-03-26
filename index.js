@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports.process = function(source, destinationDirectory) {
+module.exports.convert = function(source, destinationDirectory) {
   var destinationDirectory = destinationDirectory || __dirname;
 
   // require libs
