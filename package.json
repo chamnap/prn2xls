@@ -17,7 +17,7 @@
     "exceljs": "^0.2.4",
     "lodash": "^4.6.1",
     "node-fs-extra": "^0.8.1",
-    "commander": "^2.9.0",
+    "commander": "^2.9.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
