@@ -16,4 +16,6 @@ if (extName != '.PRN') {
   throw new Error("The source file must be .PRN file.");
 }
 
-prn2xls.convert(program.path, program.directory);
+prn2xls.convert(program.path, program.directory, function(newFilePath) {
+  console.log('File: `' + newFilePath + '` is Done!');
+});

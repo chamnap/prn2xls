@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports.convert = function(source, destinationDirectory) {
+module.exports.convert = function(source, destinationDirectory, callback) {
   var destinationDirectory = destinationDirectory || __dirname;
 
   // require libs
@@ -28,6 +28,6 @@ module.exports.convert = function(source, destinationDirectory) {
       return workbook.xlsx.writeFile(newFilePath);
     })
     .then(function() {
-      console.log('File: `' + newFilePath + '` is Done!');
+      callback(newFilePath);
     });
 };
