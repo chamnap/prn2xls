@@ -28,7 +28,7 @@ var InvoiceParser = function(content) {
   var vat             = this.matchContent('VAT    :', 'Contract Dt.:');
   var total           = this.matchAfterContent('Total  :');
   var vat10           = this.matchAfterContent('VAT 10%:');
-  var grantTotal      = this.matchAfterContent('GRAND TOTAL:');
+  var grandTotal      = this.matchAfterContent('GRAND TOTAL:');
   var contact         = this.matchContent('Contact:', 'Terms:');
   var soNumber        = this.matchAfterContent('S.O.No.     :');
   var subTotal        = this.matchAfterContent('Sub Total Page No.  1:');
@@ -46,7 +46,7 @@ var InvoiceParser = function(content) {
     vat: vat,
     total: total,
     vat10: vat10,
-    grantTotal: grantTotal,
+    grandTotal: grandTotal,
     contact: contact,
     soNumber: soNumber,
     subTotal: subTotal,

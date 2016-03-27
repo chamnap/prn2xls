@@ -8,7 +8,7 @@ ExcelUpdater.prototype = {
     var invoice = invoices[1];
 
     this.updateHeader(invoice, 0);
-    this.updateLineItems(invoice.lineItems, 0);
+    this.updateLineItems(invoice, 0);
   },
 
   updateHeader: function(invoice, startIndex) {
@@ -124,7 +124,7 @@ ExcelUpdater.prototype = {
   },
 
   // lineItems, max is 20
-  updateLineItems: function(lineItems, startIndex) {
+  updateLineItems: function(invoice, startIndex) {
     var self      = this;
 
     // header
@@ -132,7 +132,7 @@ ExcelUpdater.prototype = {
 
     // body
     var rowNumber = startIndex + 26;
-    lineItems.forEach(function(lineItem) {
+    invoice.lineItems.forEach(function(lineItem, index) {
       var hash = { line: 'B', code: 'C', description: 'D', spot: 'G', amount: 'I' };
 
       var lineCell        = 'B' + rowNumber;
@@ -152,7 +152,40 @@ ExcelUpdater.prototype = {
     });
 
     // footer
-    this.updateLineItemsFooter(rowNumber + 1);
+    if (invoice.subTotal) {
+      var rowNumber = startIndex + 26 + 20 + 1;
+      this.updateLineItemsFooter(rowNumber);
+      this.setCell('E' + (rowNumber + 1), 'សរុបទំព័រទី១​');
+      this.setCell('G' + (rowNumber + 1), 'Sub Total Page No.  1:  ');
+      this.setCell('I' + (rowNumber + 1), invoice.subTotal);
+    } else {
+      var rowNumber = startIndex + 26 + 20;
+      this.setCell('F' + (rowNumber + 1), 'សរុប');
+      this.setCell('G' + (rowNumber + 1), 'Total  :');
+      this.setCell('I' + (rowNumber + 1), invoice.total);
+      this.setCell('F' + (rowNumber + 2), 'អាករលើតម្លែបន្ថែម ១០%');
+      this.setCell('G' + (rowNumber + 2), 'VAT 10%:');
+      this.setCell('I' + (rowNumber + 2), invoice.vat);
+
+      this.updateLineItemsFooter(rowNumber + 4);
+      this.setCell('F' + (rowNumber + 5), 'សរុបរួម');
+      this.setCell('G' + (rowNumber + 5), 'GRAND TOTAL:');
+      this.setCell('I' + (rowNumber + 5), invoice.grandTotal);
+
+      // terms
+      this.setCell('B' + (rowNumber + 8), 'ការទូទាត់អាចធ្វើឡើងតាមមូលឡបទានប័ត្រ');
+      this.setCell('B' + (rowNumber + 9), 'ឬ តាមរយ:ការទូទាត់ទៅធនាគារ');
+      this.setCell('B' + (rowNumber + 10), 'Payment can be made by Cheque');
+      this.setCell('B' + (rowNumber + 11), 'or Bank Transfer payable to :');
+      this.setCell('B' + (rowNumber + 13), 'Account Name: ' + invoice.account.name);
+      this.setCell('B' + (rowNumber + 14), 'Account No  : ' + invoice.account.number);
+      this.setCell('B' + (rowNumber + 15), 'Bank Name   : ' + invoice.account.bank_name);
+      this.setCell('B' + (rowNumber + 16), 'SWIFT CODE: ' + invoice.account.swift_code);
+
+      this.setCell('I' + (rowNumber + 8), 'ហត្ថលេខា');
+      this.setCell('I' + (rowNumber + 9), 'Authorized Signature');
+      this.setCell('I' + (rowNumber + 13), '-------------------------------');
+    }
   },
 
   setCell: function(cell, value, options) {
