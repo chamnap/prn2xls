@@ -1,28 +1,31 @@
 'use strict';
 
-module.exports.convert = function(source, destinationDirectory, callback) {
+module.exports.convert = function(prnFile, destinationDirectory, callback) {
   var destinationDirectory = destinationDirectory || __dirname;
 
   // require libs
+  var fs        = require('fs');
   var fse       = require('node-fs-extra');
   var Excel     = require('exceljs');
   var path      = require('path');
-  var PrnParser = require(__dirname + '/prn_parser');
-  var ContentUpdater = require(__dirname + '/content_updater');
+  var PrnParser    = require(__dirname + '/prn_parser');
+  var ExcelUpdater = require(__dirname + '/excel_updater');
 
   // copy from sample
-  var sampleFilePath = __dirname + '/sample.xlsx';
-  var newFilePath    = destinationDirectory + '/' + path.basename(source, '.PRN') + '.xlsx';
-  fse.copySync(sampleFilePath, newFilePath);
+  var blankFilePath  = __dirname + '/blank.xlsx';
+  var baseName       = path.basename(prnFile.toLowerCase(), '.prn');
+  var newFilePath    = destinationDirectory + '/' + baseName + '.xlsx';
+  fse.copySync(blankFilePath, newFilePath);
 
   // exceljs
   var workbook  = new Excel.Workbook();
   workbook.xlsx.readFile(newFilePath)
     .then(function() {
-      var parser = PrnParser(source);
-      var contentUpdater = ContentUpdater(workbook);
+      var prnParser = PrnParser(prnFile);
+      var invoices  = prnParser.invoices;
+      var excelUpdater = ExcelUpdater(workbook);
 
-      contentUpdater.update(parser.attributes);
+      excelUpdater.update(invoices);
     })
     .then(function() {
       return workbook.xlsx.writeFile(newFilePath);

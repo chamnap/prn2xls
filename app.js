@@ -12,7 +12,7 @@ program
   .parse(process.argv);
 
 var extName = path.extname(program.path);
-if (extName != '.PRN') {
+if (extName !== '.PRN' && extName !== '.prn') {
   throw new Error("The source file must be .PRN file.");
 }
 
