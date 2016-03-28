@@ -10,20 +10,11 @@ var PrnParser = function(prnFile) {
   contents      = contents.slice(1, contents.length);
 
   var invoices = [];
-  var previousInvoice = null;
   contents.forEach(function(content, index) {
     var parser    = InvoiceParser(content);
     var invoice   = parser.attributes;
-    var lineItems = [];
 
-    if (invoice.pageNumber == 1) {
-      invoices.push(invoice);
-    } else if (invoice.pageNumber > 1) {
-      lineItems = _.concat(invoice.lineItems, previousInvoice.lineItems);
-      invoices[index-1].lineItems = _.flatten(lineItems);
-    }
-
-    previousInvoice = invoice;
+    invoices.push(invoice);
   });
 
   this.invoices = invoices;
