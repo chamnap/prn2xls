@@ -17,13 +17,13 @@ ExcelUpdater.prototype = {
     this.setCell('B' + (3 + startIndex), 'លេខអត្តសញ្ញាណកម្ម អតប');
     this.setCell('B' + (4 + startIndex), 'VAT TIN: ' + invoice.tin);
     this.setCell('B' + (6 + startIndex), 'ឈ្មោះអតិថិជន');
-    // this.setCell('C' + (6 + startIndex), invoice.customer.kh_name);
+    this.setCell('C' + (6 + startIndex), invoice.customer.kh_name);
     this.setCell('B' + (7 + startIndex), 'Bill To:           ');
-    // this.setCell('C' + (7 + startIndex), invoice.customer.en_name);
-    // this.setCell('C' + (8 + startIndex), invoice.customer.kh_address1);
-    // this.setCell('C' + (9 + startIndex), invoice.customer.en_address1);
-    // this.setCell('C' + (10 + startIndex), invoice.customer.kh_address2);
-    // this.setCell('C' + (11 + startIndex), invoice.customer.en_address2);
+    this.setCell('C' + (7 + startIndex), invoice.customer.en_name);
+    this.setCell('C' + (8 + startIndex), invoice.customer.kh_address1);
+    this.setCell('C' + (9 + startIndex), invoice.customer.en_address1);
+    this.setCell('C' + (10 + startIndex), invoice.customer.kh_address2);
+    this.setCell('C' + (11 + startIndex), invoice.customer.en_address2);
 
     this.setCell('G' + (3 + startIndex), 'ទំព័រ');
     this.setCell('G' + (4 + startIndex), 'Page No.:        ' + invoice.pageNumber);

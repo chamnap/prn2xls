@@ -7,9 +7,9 @@ var InvoiceParser = function(content) {
   this.content        = content;
 
   // company
-  var companyName     = this.matchContent('Bill To:', 'Invoice  No.:');
-  var companyAddress1 = this.matchBeforeContent('Invoice  Dt.:');
-  var companyAddress2 = this.matchBeforeContent('S.O.No.');
+  var customerName     = this.matchContent('Bill To:', 'Invoice  No.:');
+  var customerAddress1 = this.matchBeforeContent('Invoice  Dt.:');
+  var customerAddress2 = this.matchBeforeContent('S.O.No.');
 
   // invoice
   var invoiceNumber   = this.matchAfterContent('Invoice  No.:');
@@ -19,7 +19,9 @@ var InvoiceParser = function(content) {
   var contractNumber  = this.matchAfterContent('Contract No.:');
   var contractDate    = this.matchAfterContent('Contract Dt.:');
   var contractTerms1  = this.matchAfterContent('Terms:');
-  var contractTerms2  = this.matchAfterContent(contractTerms1);
+  if(contractTerms1 == '7 days after the') {
+    var contractTerms2  = 'date of receiving invoice';
+  }
 
   // total
   var tin             = this.matchContent('VAT TIN:', 'Page No.:');
@@ -50,10 +52,10 @@ var InvoiceParser = function(content) {
     contact: contact,
     soNumber: soNumber,
     subTotal: subTotal,
-    company: {
-      name: companyName,
-      address1: companyAddress1,
-      address2: companyAddress2
+    customer: {
+      en_name: customerName,
+      en_address1: customerAddress1,
+      en_address2: customerAddress2
     },
     invoice: {
       number: invoiceNumber,
