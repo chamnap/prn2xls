@@ -26,6 +26,7 @@ var InvoiceParser = function(content) {
   // total
   var tin             = this.matchContent('VAT TIN:', 'Page No.:');
   var pageNumber      = this.matchAfterContent('Page No.:');
+  var khmerPageNumber = this.khmerNumber(pageNumber);
   var cCode           = this.matchContent('C.Code :', 'Contract No.:');
   var vat             = this.matchContent('VAT    :', 'Contract Dt.:');
   var total           = this.matchAfterContent('Total  :');
@@ -33,7 +34,13 @@ var InvoiceParser = function(content) {
   var grandTotal      = this.matchAfterContent('GRAND TOTAL:');
   var contact         = this.matchContent('Contact:', 'Terms:');
   var soNumber        = this.matchAfterContent('S.O.No.     :');
-  var subTotal        = this.matchAfterContent('Sub Total Page No.  1:');
+  var subTotalString  = this.matchAfterContent('Sub Total Page No.');
+  var subTotal;
+
+  if (subTotalString) {
+    var subTotalArray = subTotalString.split(':');
+    subTotal = subTotalArray[subTotalArray.length-1].trim();
+  }
 
   // account
   var accountName     = this.matchContent('Account Name:', '...................');
@@ -44,6 +51,7 @@ var InvoiceParser = function(content) {
   this.attributes = {
     tin: tin,
     pageNumber: pageNumber,
+    khmerPageNumber: khmerPageNumber,
     cCode: cCode,
     vat: vat,
     total: total,
@@ -210,6 +218,23 @@ InvoiceParser.prototype = {
     }
 
     return attributes;
+  },
+
+  khmerNumber: function(number) {
+    number = number + '';
+
+    number = number.replace(/1/gm, '១');
+    number = number.replace(/2/gm, '២');
+    number = number.replace(/3/gm, '៣');
+    number = number.replace(/4/gm, '៤');
+    number = number.replace(/5/gm, '៥');
+    number = number.replace(/6/gm, '៦');
+    number = number.replace(/7/gm, '៧');
+    number = number.replace(/8/gm, '៨');
+    number = number.replace(/9/gm, '៩');
+    number = number.replace(/0/gm, '០');
+
+    return number;
   }
 };
 
