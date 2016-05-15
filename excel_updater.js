@@ -95,9 +95,9 @@ ExcelUpdater.prototype = {
     this.setCell(worksheet, 'J' + (11 + startingRow), ':');
     this.setCell(worksheet, 'K' + (11 + startingRow), invoice.contract.date);
 
-    this.setCell(worksheet, 'I' + (12 + startingRow), 'រយ:ពេលទូទាត់', this.rightTopAlignmentKhmerFont);
+    this.setCell(worksheet, 'I' + (12 + startingRow), 'រយះពេលទូទាត់', this.rightTopAlignmentKhmerFont);
     this.setCell(worksheet, 'J' + (12 + startingRow), ':', this.leftTopAlignmentKhmerFont);
-    this.setCell(worksheet, 'K' + (12 + startingRow), '៧ថ្ងៃបន្ទាប់ពីទទួលបានវិក្កយប័ត្រ', this.leftTopAlignmentKhmerFont);
+    this.setCell(worksheet, 'K' + (12 + startingRow), '៧ថ្ងៃបន្ទាប់ពីទទួលបានវិក្កយប័ត្រ', _.extend({}, this.leftTopAlignmentKhmerFont, { alignment: { wrapText: false } }));
 
     this.setCell(worksheet, 'I' + (13 + startingRow), 'Terms', this.rightAlignmentKhmerFont);
     this.setCell(worksheet, 'J' + (13 + startingRow), ':');
@@ -107,14 +107,14 @@ ExcelUpdater.prototype = {
     this.setCell(worksheet, 'B' + (17 + startingRow), 'លេខរៀង', this.khmerFontOptions);
     this.setCell(worksheet, 'C' + (17 + startingRow), 'កូតទំនិញេ/សេវា', this.khmerFontOptions);
     this.setCell(worksheet, 'D' + (17 + startingRow), 'បរិយាយមុខទំនិញ/សេវា', this.khmerFontOptions);
-    this.setCell(worksheet, 'I' + (17 + startingRow), 'បរិមាណ', this.khmerFontOptions);
-    this.setCell(worksheet, 'K' + (17 + startingRow), 'ចំនួនទឹកប្រាក់', this.khmerFontOptions);
+    this.setCell(worksheet, 'I' + (17 + startingRow), 'បរិមាណ', this.rightAlignmentKhmerFont);
+    this.setCell(worksheet, 'K' + (17 + startingRow), 'ចំនួនទឹកប្រាក់', this.rightAlignmentKhmerFont);
 
     this.setCell(worksheet, 'B' + (18 + startingRow), 'Line');
     this.setCell(worksheet, 'C' + (18 + startingRow), 'Item Code');
     this.setCell(worksheet, 'D' + (18 + startingRow), 'Item Description');
-    this.setCell(worksheet, 'I' + (18 + startingRow), 'No.of Spot');
-    this.setCell(worksheet, 'K' + (18 + startingRow), 'US$ Amount');
+    this.setCell(worksheet, 'I' + (18 + startingRow), 'No.of Spot', this.rightAlignmentOptions);
+    this.setCell(worksheet, 'K' + (18 + startingRow), 'US$ Amount', this.rightAlignmentOptions);
   },
 
   updateLineItemsHeader: function(worksheet, startingRow) {

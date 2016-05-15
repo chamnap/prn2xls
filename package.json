@@ -15,7 +15,8 @@
     "lodash": "^4.6.1",
     "commander": "^2.9.0",
     "exceljs": "^0.2.4",
-    "node-fs-extra": "^0.8.1"
+    "node-fs-extra": "^0.8.1",
+    "unoconv2": "git@github.com:HAASLEWER/unoconv2.git"
   },
   "devDependencies": {
     "chai": "^3.5.0",

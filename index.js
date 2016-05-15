@@ -4,18 +4,26 @@ var fse       = require('node-fs-extra');
 var Excel     = require('exceljs');
 var path      = require('path');
 var _         = require('lodash');
-var PrnParser    = require(__dirname + '/prn_parser');
-var ExcelUpdater = require(__dirname + '/excel_updater');
+var unoconv   = require('unoconv2');
+
+var PrnParser    = require('./prn_parser');
+var ExcelUpdater = require('./excel_updater');
 
 var findCustomer = function(invoice, customers) {
   return _.find(customers, function(customer) { return customer.en_name == invoice.customer.en_name });
 };
 
-module.exports.convert = function(prnFile, destinationDirectory, customers, callback) {
+var convertXls = function(prnFile, destinationDirectory, options, callback) {
+  if (_.isFunction(options)) {
+    callback = options;
+    options = {};
+  }
+
   var destinationDirectory = destinationDirectory || __dirname;
   var prnParser = PrnParser(prnFile);
   var invoices  = prnParser.invoices;
   var missings  = [];
+  var customers = options.customers;
 
   _.forEach(invoices, function(invoice) {
     var customer = findCustomer(invoice, customers);
@@ -53,4 +61,31 @@ module.exports.convert = function(prnFile, destinationDirectory, customers, call
     .then(function() {
       callback(null, newFilePath);
     });
+};
+
+// options has two keys: customers and unoconvPath
+var convertPdf = function(prnFile, destinationDirectory, options, callback) {
+  if (_.isFunction(options)) {
+    callback = options;
+    options = {};
+  }
+
+  convertXls(prnFile, destinationDirectory, options, function(error, excelPath) {
+    if (error) {
+      return;
+    }
+
+    var pdfPath = excelPath.replace('.xlsx', '.pdf');
+    var unoconvOptions = { bin: options.unoconvPath };
+    unoconv.convert(excelPath, 'pdf', unoconvOptions, function (err, result) {
+      fs.writeFileSync(pdfPath, result);
+      fse.removeSync(excelPath);
+      callback(null, pdfPath);
+    });
+  });
+};
+
+module.exports = {
+  xls: convertXls,
+  pdf: convertPdf
 };
