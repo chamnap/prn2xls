@@ -5,7 +5,7 @@ var ExcelUpdater = function(workbook) {
 
   this.rightAlignmentOptions = { alignment: { horizontal: 'right' } };
   this.khmerFontOptions = { font: { name: 'Khmer OS', size: 10 } };
-  this.khmerBigFontOptions = { font: { name: 'Khmer OS', size: 12 } };
+  this.khmerBigFontOptions = { font: { name: 'Khmer OS', size: 12, bold: true } };
 
   this.leftTopAlignmentKhmerFont  = { alignment: { vertical: 'top', horizontal: 'left', wrapText: true }, font: { name: 'Khmer OS', size: 10 } };
   this.rightTopAlignmentKhmerFont = { alignment: { vertical: 'top', horizontal: 'right', wrapText: true }, font: { name: 'Khmer OS', size: 10 } };
@@ -24,7 +24,7 @@ ExcelUpdater.prototype = {
       }
 
       worksheet.columns = [
-        { width: 3.6 },   // A
+        { width: 8.2 },   // A
         { width: 10.6 },  // B
         { width: 14.2 },  // C
         { width: 9.2 },   // D
