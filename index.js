@@ -6,6 +6,11 @@ var path      = require('path');
 var _         = require('lodash');
 var unoconv   = require('unoconv2');
 
+//  
+var dialog    = require('electron').dialog;
+var exec      = require('child_process').exec;
+var util      = require('util');
+
 var PrnParser    = require('./prn_parser');
 var ExcelUpdater = require('./excel_updater');
 
@@ -65,24 +70,39 @@ var convertXls = function(prnFile, destinationDirectory, options, callback) {
 
 // options has two keys: customers and unoconvPath
 var convertPdf = function(prnFile, destinationDirectory, options, callback) {
-  if (_.isFunction(options)) {
-    callback = options;
-    options = {};
-  }
+  // if (_.isFunction(options)) {
+  //   callback = options;
+  //   options = {};
+  // }
 
-  convertXls(prnFile, destinationDirectory, options, function(error, excelPath) {
-    if (error) {
-      return;
-    }
+  // convertXls(prnFile, destinationDirectory, options, function(error, excelPath) {
+  //   if (error) {
+  //     return;
+  //   }
 
-    var pdfPath = excelPath.replace('.xlsx', '.pdf');
-    var unoconvOptions = { bin: options.unoconvPath };
-    unoconv.convert(excelPath, 'pdf', unoconvOptions, function (err, result) {
-      fs.writeFileSync(pdfPath, result);
-      fse.removeSync(excelPath);
-      callback(null, pdfPath);
-    });
+  //   var pdfPath = excelPath.replace('.xlsx', '.pdf');
+  //   var unoconvOptions = { bin: options.unoconvPath };
+  //   unoconv.convert(excelPath, 'pdf', unoconvOptions, function (err, result) {
+  //     fs.writeFileSync(pdfPath, result);
+  //     fse.removeSync(excelPath);
+  //     callback(null, pdfPath);
+  //   });
+  // });
+
+  var prnParser = PrnParser(prnFile);
+  var invoices  = prnParser.invoices;
+  var invoice   = invoices[0];
+
+  var htmlFileName = 'pdf.html', 
+    pdfFileName    = 'page.pdf';
+
+  var child = exec('wkhtmltopdf -s A4 -L 15.05mm -R 19.05mm -T 19.05mm -B 19.05mm ' + htmlFileName + ' page.pdf', function(err, stdout, stderr) {
+    if(err) { throw err; }
+    util.log(stderr);
   });
+
+
+  // dialog.showMessageBox({ message: invoiceProp, buttons:[] })
 };
 
 module.exports = {
