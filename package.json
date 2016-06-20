@@ -17,7 +17,7 @@
     "lodash": "^4.6.1",
     "node-fs-extra": "^0.8.1",
     "unoconv2": "git@github.com:HAASLEWER/unoconv2.git",
-    "wkhtmltopdf": "git@github.com:knassar/node-wkhtmltopdf.git#cover-toc-multi-page"
+    "wkhtmltopdf": "^0.3.1"
   },
   "devDependencies": {
     "chai": "^3.5.0",
