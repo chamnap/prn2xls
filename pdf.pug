@@ -1,0 +1,266 @@
+html
+  head
+    meta(charset='utf-8')
+    meta(content='IE=edge,chrome=1', http-equiv='X-UA-Compatible')
+    title
+    style(type='text/css').
+      @font-face {
+      font-family: 'KhmerOS';
+      src: url('assets/fonts/KhmerOS.eot');
+      src: url('assets/fonts/KhmerOS.eot?#iefix') format('embedded-opentype'),
+      url('assets/fonts/KhmerOS.woff2') format('woff2'),
+      url('assets/fonts/KhmerOS.woff') format('woff'),
+      url('assets/fonts/KhmerOS.ttf') format('truetype'),
+      url('assets/fonts/KhmerOS.svg#@{icon-font-svg-id}') format('svg');
+      }
+      * {
+      margin: 0;
+      padding: 0;
+      line-height: 21px;
+      font-size: 14px;
+      }
+      .container {
+      width: 1005px;
+      margin: 0 auto;
+      page-break-before: always;
+      }
+      .vat-invoice {
+      font-weight: bold;
+      padding-left: 3px;
+      font-size: 16px;
+      }
+      #header {
+      margin-bottom: 30px;
+      }
+      #address {
+      border-bottom: 1px inset #949292;
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      }
+      .table {
+      width: 1005px;
+      }
+      table, th, td {
+      vertical-align: top
+      }
+      td:nth-child(3n) {
+      width: 305px;
+      }
+      td:nth-child(4n) {
+      text-align: right;
+      margin-right: 5px;
+      }
+      td:last-child {
+      padding-left: 15px;
+      width: 183px;
+      }
+      .table-goods td:last-child{
+      text-align: right;
+      }
+      .table-goods {
+      border-spacing: 0;
+      border-collapse: collapse;
+      }
+      .table-goods tr:nth-child(2) td {
+      border: 0;
+      padding-bottom: 15px;
+      border-bottom: 1px inset #949292;
+      }
+      .table-goods tr:nth-child(3) td {
+      padding-top: 15px;
+      }
+      .sub-total,
+      .grand-total {
+      border-top: 1px inset #949292;
+      border-bottom: 1px inset #949292;
+      }
+      .sub-total td,
+      .grand-total td {
+      padding: 15px 0;
+      text-align: right;
+      }
+      .total td {
+      padding-top: 15px;
+      }
+      .vat td {
+      padding-bottom: 15px;
+      }
+      .summary {
+      text-align: right;
+      }
+      .summary td:nth-child(3) {
+      width: 175px;
+      }
+      .footer {
+      margin-top: 30px;
+      margin-bottom: 45px;
+      }
+      .payment-options {
+      float: left;
+      }
+      .payment-options ul {
+      list-style: none;
+      }
+      .signature {
+      float: right;
+      }
+      .account-info {
+      margin-top: 15px;
+      }
+      .sign-place {
+      margin-top: 90px;
+      border-bottom: 1px dotted #808080;
+      }
+      .clear {
+      clear: both;
+      }
+      .kh-pay { width: 225px; }
+      .en-pay {
+      width: 225px;
+      margin-top: 5px;
+      }
+  body
+    .container
+      section#header
+        p.vat-invoice
+          | វិក្កយប័ត្រអាករ
+        p VAT INVOICE
+        p លេខអត្តសញាណកម្ម អតប/VAT TIN: 
+          = ' ' + invoice.tin
+      section#address
+        table.table
+          tr
+            td ឈ្មោះអតិថិជន:
+            td  
+            td  
+            td ទំព័រ/Page No.:
+            td= invoice.pageNumber
+          tr
+            td Bill To:
+            td= invoice.customer.en_name
+            td  
+            td លេខរៀងវិក្កយប័ត្រ/Invoice No.:
+            td= invoice.invoice.number
+          tr
+            td អាស័យដ្ឋាន:
+            td
+            td  
+            td កាលបរិច្ឆេទ/Invoice Dt.:
+            td= invoice.invoice.date
+          tr
+            td
+            td
+            td  
+            td លេខរៀងការបញ្ជាទិញ/S.O.No.:
+            td= invoice.soNumber
+          tr
+            td Address:
+            td= invoice.customer.en_address1
+              br
+            td  
+            td កិច្ចសន្យាលេខ/Contract No.:
+            td= invoice.contract.number
+          tr
+            td
+            td= invoice.customer.en_address2
+            td  
+            td កាលបរិច្ឆេទនៃកិច្ចសន្យា/Contract Dt.:
+            td= invoice.contract.date
+          tr
+            td C.Code:
+            td= invoice.cCode
+            td  
+            td រយះពេលទូទាត់:
+            td ៧ថ្ងៃបន្ទាប់ពីទទួលបានវិក្កយប័ត្រ
+          tr
+            td VAT:
+            td
+            td  
+            td Terms:
+            td= invoice.contract.terms1              
+          tr
+            td Contact:
+            td= invoice.contact
+            td  
+            td
+            td= invoice.contract.terms2
+      section.goods-list
+        table.table.table-goods
+          tr
+            td លេខរៀង
+            td កូតទំនិញ/សេវា
+            td បរិយាយមុខទំនិញ/សេវា
+            td បរិមាណ
+            td ចំនួនទឺកប្រាក់
+          tr
+            td Line
+            td Item Code
+            td Item Description
+            td No.of Spot
+            td US$ Amount
+          each lineItem in invoice.lineItems
+            tr
+              td= lineItem.line
+              td= lineItem.codeItem
+              td= lineItem.description
+              td= lineItem.spot
+              td= lineItem.amount
+          - var n = invoice.lineItems.length
+          while 20 - n > 0
+            tr
+              td &nbsp;
+              td &nbsp;
+              td &nbsp;
+              td &nbsp;
+              td &nbsp;
+              - n++
+          if invoice.subTotal
+            tr
+              td(colspan='5')  
+            tr
+              td(colspan='5')  
+            tr.summary.sub-total
+              td(colspan='2')  
+              td សរុបទំព័រទី១
+              td Sub Total Page No. 1:
+              td= invoice.subTotal
+          else
+            tr.summary.total
+              td(colspan='2')  
+              td សរុប
+              td Total :
+              td= invoice.total
+            tr.summary.vat
+              td(colspan='2')  
+              td អាករលើតម្លៃបន្ថែម ១០%
+              td VAT 10% :
+              td= invoice.vat10
+            tr.summary.grand-total
+              td(colspan='2')  
+              td សរុបរួម
+              td GRAND TOTAL:
+              td= invoice.grandTotal
+      if !invoice.subTotal
+        section.footer
+          .payment-options
+            p.kh-pay ការទូទាត់អាចធ្វើឡើងតាមមូលឡបទានប័ត្រ ឬ តាមរយៈការទូទាត់នៅធនាគារ
+            p.en-pay Payment can be made by Cheque or Bank Tansfer payable to :
+            ul.account-info
+              li 
+                | Account Name: 
+                = invoice.account.name
+              li 
+                | Account No: 
+                = invoice.account.number
+              li 
+                | Bank Name: 
+                = invoice.account.bank_name
+              li 
+                | SWIFT Code: 
+                = invoice.account.swift_code
+          .signature
+            p ហត្ថលេខា
+            p Authorized Signature
+            p.sign-place
+          .clear
+

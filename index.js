@@ -10,6 +10,8 @@ var unoconv   = require('unoconv2');
 var dialog    = require('electron').dialog;
 var exec      = require('child_process').exec;
 var util      = require('util');
+var wkhtmltopdf = require('wkhtmltopdf');
+var jade        = require('jade');
 
 var PrnParser    = require('./prn_parser');
 var ExcelUpdater = require('./excel_updater');
@@ -93,15 +95,39 @@ var convertPdf = function(prnFile, destinationDirectory, options, callback) {
   var invoices  = prnParser.invoices;
   var invoice   = invoices[0];
 
-  var htmlFileName = './pdf.html';
+  //var htmlFileName = './pdf.html';
+  var pdfPath = __dirname + '/output.pdf';
+  var jadeTemplate = fs.readFileSync(__dirname + '/pdf.pug', 'utf8');
+  var fn = jade.compile(jadeTemplate);
 
-  var child = exec('wkhtmltopdf -s A4 -L 15.05mm -R 19.05mm -T 19.05mm -B 19.05mm ' + htmlFileName + ' ./page.pdf', function(err, stdout, stderr) {
-    if(err) { throw err; }
-    util.log(stderr);
-  });
+  var htmlOutput = '';
+
+  for(var i = 0; i < invoices.length; i++) {
+    htmlOutput += fn({ invoice: invoices[i] });
+  }
+
+  dialog.showMessageBox({ message: htmlOutput, buttons:[] })
+  wkhtmltopdf(htmlOutput, 
+    { 
+      pageSize: 'A4', 
+      marginLeft: '15.05mm', 
+      marginRight: '19.05mm',  
+      marginTop: '19.05mm',
+      marginBottom: '19.05mm'
+    }, function(err){
+      if(err) { 
+        throw err;
+      } else {
+        callback(null, pdfPath);
+      }
+    })
+    .pipe(fs.createWriteStream(pdfPath));
+  // var child = exec('wkhtmltopdf -s A4 -L 15.05mm -R 19.05mm -T 19.05mm -B 19.05mm ' + htmlFileName + ' ./page.pdf', function(err, stdout, stderr) {
+  //   if(err) { throw err; }
+  //   util.log(stderr);
+  // });
 
 
-  // dialog.showMessageBox({ message: invoiceProp, buttons:[] })
 };
 
 module.exports = {
