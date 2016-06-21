@@ -6,10 +6,6 @@ var path      = require('path');
 var _         = require('lodash');
 var unoconv   = require('unoconv2');
 
-//  
-var dialog    = require('electron').dialog;
-var exec      = require('child_process').exec;
-var util      = require('util');
 var wkhtmltopdf = require('wkhtmltopdf');
 var jade        = require('jade');
 
@@ -72,30 +68,9 @@ var convertXls = function(prnFile, destinationDirectory, options, callback) {
 
 // options has two keys: customers and unoconvPath
 var convertPdf = function(prnFile, destinationDirectory, options, callback) {
-  // if (_.isFunction(options)) {
-  //   callback = options;
-  //   options = {};
-  // }
-
-  // convertXls(prnFile, destinationDirectory, options, function(error, excelPath) {
-  //   if (error) {
-  //     return;
-  //   }
-
-  //   var pdfPath = excelPath.replace('.xlsx', '.pdf');
-  //   var unoconvOptions = { bin: options.unoconvPath };
-  //   unoconv.convert(excelPath, 'pdf', unoconvOptions, function (err, result) {
-  //     fs.writeFileSync(pdfPath, result);
-  //     fse.removeSync(excelPath);
-  //     callback(null, pdfPath);
-  //   });
-  // });
-
   var prnParser = PrnParser(prnFile);
   var invoices  = prnParser.invoices;
-  var invoice   = invoices[0];
 
-  //var htmlFileName = './pdf.html';
   var pdfPath = __dirname + '/output.pdf';
   var jadeTemplate = fs.readFileSync(__dirname + '/pdf.pug', 'utf8');
   var fn = jade.compile(jadeTemplate);
@@ -106,7 +81,6 @@ var convertPdf = function(prnFile, destinationDirectory, options, callback) {
     htmlOutput += fn({ invoice: invoices[i] });
   }
 
-  dialog.showMessageBox({ message: htmlOutput, buttons:[] })
   wkhtmltopdf(htmlOutput, 
     { 
       pageSize: 'A4', 
@@ -122,12 +96,6 @@ var convertPdf = function(prnFile, destinationDirectory, options, callback) {
       }
     })
     .pipe(fs.createWriteStream(pdfPath));
-  // var child = exec('wkhtmltopdf -s A4 -L 15.05mm -R 19.05mm -T 19.05mm -B 19.05mm ' + htmlFileName + ' ./page.pdf', function(err, stdout, stderr) {
-  //   if(err) { throw err; }
-  //   util.log(stderr);
-  // });
-
-
 };
 
 module.exports = {
