@@ -125,13 +125,13 @@ html
         p.vat-invoice
           | វិក្កយប័ត្រអាករ
         p VAT INVOICE
-        p លេខអត្តសញាណកម្ម អតប/VAT TIN: 
+        p លេខអត្តសញាណកម្ម អតប/VAT TIN:
           = ' ' + invoice.tin
       section#address
         table.table
           tr
             td ឈ្មោះអតិថិជន:
-            td  
+            td= invoice.customer.kh_name
             td  
             td ទំព័រ/Page No.:
             td= invoice.pageNumber
@@ -143,13 +143,13 @@ html
             td= invoice.invoice.number
           tr
             td អាស័យដ្ឋាន:
-            td
+            td= invoice.customer.kh_address1
             td  
             td កាលបរិច្ឆេទ/Invoice Dt.:
             td= invoice.invoice.date
           tr
             td
-            td
+            td= invoice.customer.kh_address2
             td  
             td លេខរៀងការបញ្ជាទិញ/S.O.No.:
             td= invoice.soNumber
@@ -177,7 +177,7 @@ html
             td
             td  
             td Terms:
-            td= invoice.contract.terms1              
+            td= invoice.contract.terms1
           tr
             td Contact:
             td= invoice.contact
@@ -221,8 +221,8 @@ html
               td(colspan='5')  
             tr.summary.sub-total
               td(colspan='2')  
-              td សរុបទំព័រទី១
-              td Sub Total Page No. 1:
+              td= "សរុបទំព័រទី" + invoice.khmerPageNumber
+              td= "Sub Total Page No. " + invoice.pageNumber + ":"
               td= invoice.subTotal
           else
             tr.summary.total
@@ -246,17 +246,17 @@ html
             p.kh-pay ការទូទាត់អាចធ្វើឡើងតាមមូលឡបទានប័ត្រ ឬ តាមរយៈការទូទាត់នៅធនាគារ
             p.en-pay Payment can be made by Cheque or Bank Tansfer payable to :
             ul.account-info
-              li 
-                | Account Name: 
+              li
+                | Account Name:
                 = invoice.account.name
-              li 
-                | Account No: 
+              li
+                | Account No:
                 = invoice.account.number
-              li 
-                | Bank Name: 
+              li
+                | Bank Name:
                 = invoice.account.bank_name
-              li 
-                | SWIFT Code: 
+              li
+                | SWIFT Code:
                 = invoice.account.swift_code
           .signature
             p ហត្ថលេខា
