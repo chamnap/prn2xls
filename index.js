@@ -65,12 +65,12 @@ var convertXls = function(prnFile, destinationDirectory, options, callback) {
     });
 };
 
-// options has two keys: customers and unoconvPath
 var convertPdf = function(prnFile, destinationDirectory, options, callback) {
   var prnParser = PrnParser(prnFile);
   var invoices  = prnParser.invoices;
 
-  var pdfPath = __dirname + '/output.pdf';
+  var baseName       = path.basename(prnFile.toLowerCase(), '.prn');
+  var newFilePath    = destinationDirectory + '/' + baseName + '.pdf';
   var jadeTemplate = fs.readFileSync(__dirname + '/pdf.pug', 'utf8');
   var fn = jade.compile(jadeTemplate);
 
@@ -80,15 +80,15 @@ var convertPdf = function(prnFile, destinationDirectory, options, callback) {
     htmlOutput += fn({ invoice: invoices[i] });
   }
 
-  wkhtmltopdf(htmlOutput, 
-    { 
-      pageSize: 'A4', 
-      marginLeft: '15.05mm', 
-      marginRight: '19.05mm',  
+  wkhtmltopdf(htmlOutput,
+    {
+      pageSize: 'A4',
+      marginLeft: '15.05mm',
+      marginRight: '19.05mm',
       marginTop: '19.05mm',
       marginBottom: '19.05mm'
     }, function(err){
-      if(err) { 
+      if(err) {
         throw err;
       } else {
         callback(null, pdfPath);
