@@ -104,6 +104,11 @@ var convertPdf = function(prnFile, destinationDirectory, options, callback) {
     htmlOutput += fn({ invoice: invoices[i] });
   }
 
+  var isWindows = /^win/.test(process.platform);
+  if (isWindows) {
+    wkhtmltopdf.command = 'C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe';
+  }
+
   wkhtmltopdf(htmlOutput,
     {
       pageSize: 'A4',
