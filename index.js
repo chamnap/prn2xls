@@ -4,7 +4,6 @@ var fse       = require('node-fs-extra');
 var Excel     = require('exceljs');
 var path      = require('path');
 var _         = require('lodash');
-var unoconv   = require('unoconv2');
 
 var wkhtmltopdf = require('wkhtmltopdf');
 var jade        = require('jade');
