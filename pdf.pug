@@ -174,7 +174,7 @@ html
             td ៧ថ្ងៃបន្ទាប់ពីទទួលបានវិក្កយប័ត្រ
           tr
             td VAT:
-            td
+            td= invoice.vat
             td  
             td Terms:
             td= invoice.contract.terms1
@@ -247,16 +247,16 @@ html
             p.en-pay Payment can be made by Cheque or Bank Tansfer payable to :
             ul.account-info
               li
-                | Account Name:
+                | Account Name:&nbsp;
                 = invoice.account.name
               li
-                | Account No:
+                | Account No:&nbsp;
                 = invoice.account.number
               li
-                | Bank Name:
+                | Bank Name:&nbsp;
                 = invoice.account.bank_name
               li
-                | SWIFT Code:
+                | SWIFT Code:&nbsp;
                 = invoice.account.swift_code
           .signature
             p ហត្ថលេខា

@@ -80,9 +80,7 @@ var convertPdf = function(prnFile, destinationDirectory, options, callback) {
   _.forEach(invoices, function(invoice) {
     var customer = findCustomer(invoice, customers);
     if (customer) {
-      invoice.customer.kh_name     = customer.kh_name;
-      invoice.customer.kh_address1 = customer.kh_address1;
-      invoice.customer.kh_address2 = customer.kh_address2;
+      invoice.customer = customer;
     } else {
       missings.push(invoice.customer.en_name);
     }
@@ -90,7 +88,7 @@ var convertPdf = function(prnFile, destinationDirectory, options, callback) {
   missings = _.uniq(missings);
 
   if (customers && missings.length > 0) {
-    callback(missings);
+    return callback(missings);
   }
 
   var baseName     = path.basename(prnFile.toLowerCase(), '.prn');
