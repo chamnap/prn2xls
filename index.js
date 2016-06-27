@@ -80,7 +80,9 @@ var convertPdf = function(prnFile, destinationDirectory, options, callback) {
   _.forEach(invoices, function(invoice) {
     var customer = findCustomer(invoice, customers);
     if (customer) {
-      invoice.customer = customer;
+      invoice.customer.kh_name     = customer.kh_name;
+      invoice.customer.kh_address1 = customer.kh_address1;
+      invoice.customer.kh_address2 = customer.kh_address2;
     } else {
       missings.push(invoice.customer.en_name);
     }
