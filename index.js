@@ -108,7 +108,7 @@ var convertPdf = function(prnFile, destinationDirectory, options, callback) {
   wkhtmltopdf(htmlOutput,
     {
       pageSize: 'A4',
-      marginLeft: '15.05mm',
+      marginLeft: '19.05mm',
       marginRight: '19.05mm',
       marginTop: '19.05mm',
       marginBottom: '19.05mm'
