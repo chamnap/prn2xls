@@ -91,8 +91,10 @@ var convertPdf = function(prnFile, destinationDirectory, options, callback) {
 
   var baseName     = path.basename(prnFile.toLowerCase(), '.prn');
   var pdfPath      = destinationDirectory + '/' + baseName + '.pdf';
+  var jadeHeaderTemplate = fs.readFileSync(__dirname + '/header.pug', 'utf8');
   var jadeTemplate = fs.readFileSync(__dirname + '/pdf.pug', 'utf8');
-  var fn = jade.compile(jadeTemplate);
+  var fn           = jade.compile(jadeTemplate);
+  var headerFn     = jade.compile(jadeHeaderTemplate);
 
   var htmlOutput = '';
 
@@ -105,7 +107,10 @@ var convertPdf = function(prnFile, destinationDirectory, options, callback) {
     wkhtmltopdf.command = 'C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe';
   }
 
-  wkhtmltopdf(htmlOutput,
+  var result = headerFn().replace('***PLACEHOLDER***', htmlOutput);
+
+
+  wkhtmltopdf(result,
     {
       pageSize: 'A4',
       marginLeft: '19.05mm',
