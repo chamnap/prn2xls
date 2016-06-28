@@ -19,6 +19,14 @@ html
       line-height: 21px;
       font-size: 14px;
       }
+      [lang="kh"] {
+      font-size: 15px;
+      font-family: sans-serif;
+      }
+      [lang="en"] {
+      font-size: 14px;
+      font-family: sans-serif;
+      }
       .container {
       width: 1005px;
       margin: 0 auto;
@@ -26,14 +34,17 @@ html
       }
       .vat-invoice {
       font-weight: bold;
-      padding-left: 3px;
-      font-size: 16px;
+      padding-left: 5px;
+      font-size: 20px;
+      }
+      .vat-invoice-en {
+      line-height: 30px;
       }
       #header {
       margin-bottom: 30px;
       }
       #address {
-      border-bottom: 1px inset #949292;
+      border-bottom: 1px inset #000;
       margin-bottom: 15px;
       padding-bottom: 15px;
       }
@@ -42,10 +53,7 @@ html
       }
       table, th, td {
       vertical-align: top
-      }
-      td:nth-child(3n) {
-      width: 305px;
-      }
+      }      
       td:nth-child(4n) {
       text-align: right;
       margin-right: 5px;
@@ -64,15 +72,15 @@ html
       .table-goods tr:nth-child(2) td {
       border: 0;
       padding-bottom: 15px;
-      border-bottom: 1px inset #949292;
+      border-bottom: 1px inset #000;
       }
       .table-goods tr:nth-child(3) td {
       padding-top: 15px;
       }
       .sub-total,
       .grand-total {
-      border-top: 1px inset #949292;
-      border-bottom: 1px inset #949292;
+      border-top: 1px inset #000;
+      border-bottom: 1px inset #000;
       }
       .sub-total td,
       .grand-total td {
@@ -109,102 +117,139 @@ html
       }
       .sign-place {
       margin-top: 90px;
-      border-bottom: 1px dotted #808080;
       }
       .clear {
       clear: both;
       }
-      .kh-pay { width: 225px; }
+      .kh-pay { 
+      width: 225px; 
+      padding-left: 1px;
+      }
       .en-pay {
       width: 225px;
       margin-top: 5px;
+      padding-left: 1px;
       }
   body
     .container
       section#header
-        p.vat-invoice
+        strong.vat-invoice
           | វិក្កយប័ត្រអាករ
-        p VAT INVOICE
-        p លេខអត្តសញាណកម្ម អតប/VAT TIN:
-          = ' ' + invoice.tin
+        p.vat-invoice-en(lang='en') VAT INVOICE
+        p 
+          span(lang='kh') លេខអត្តសញាណកម្ម អតប
+          span(lang='en')
+            | /VAT TIN:
+            = ' ' + invoice.tin
       section#address
         table.table
           tr
-            td ឈ្មោះអតិថិជន:
-            td= invoice.customer.kh_name
+            td(lang='kh') ឈ្មោះអតិថិជន:
+            td(lang='kh')= invoice.customer.kh_name
             td  
-            td ទំព័រ/Page No.:
-            td= invoice.pageNumber
+            td 
+              span(lang='kh') ទំព័រ
+              span(lang='en') /Page No. :
+            td(lang='en')= invoice.pageNumber
           tr
-            td Bill To:
-            td= invoice.customer.en_name
+            td(lang='en') Bill To:
+            td(lang='en')= invoice.customer.en_name
             td  
-            td លេខរៀងវិក្កយប័ត្រ/Invoice No.:
-            td= invoice.invoice.number
+            td 
+              span(lang='kh') លេខរៀងវិក្កយប័ត្រ
+              span(lang='en') /Invoice No. :
+            td(lang='en')
+              = invoice.invoice.number
           tr
-            td អាស័យដ្ឋាន:
-            td= invoice.customer.kh_address1
+            td(lang='kh') អាស័យដ្ឋាន:
+            td(lang='en')
+              = invoice.customer.kh_address1
             td  
-            td កាលបរិច្ឆេទ/Invoice Dt.:
-            td= invoice.invoice.date
+            td 
+              span(lang='kh') កាលបរិច្ឆេទ
+              span(lang='en') /Invoice Dt. :
+            td(lang='en')
+              = invoice.invoice.date
           tr
             td
-            td= invoice.customer.kh_address2
+            td(lang='kh')
+              = invoice.customer.kh_address2
             td  
-            td លេខរៀងការបញ្ជាទិញ/S.O.No.:
-            td= invoice.soNumber
+            td 
+              span(lang='kh') លេខរៀងការបញ្ជាទិញ
+              span(lang='en') /S.O.No. :
+            td(lang='en')
+              = invoice.soNumber
           tr
-            td Address:
-            td= invoice.customer.en_address1
+            td(lang='en') Address:
+            td(lang='en')
+              = invoice.customer.en_address1
               br
             td  
-            td កិច្ចសន្យាលេខ/Contract No.:
-            td= invoice.contract.number
+            td 
+              span(lang='kh') កិច្ចសន្យាលេខ
+              span(lang='en') /Contract No. :
+            td(lang='en')
+              = invoice.contract.number
           tr
             td
-            td= invoice.customer.en_address2
-            td  
-            td កាលបរិច្ឆេទនៃកិច្ចសន្យា/Contract Dt.:
-            td= invoice.contract.date
-          tr
-            td C.Code:
-            td= invoice.cCode
-            td  
-            td រយះពេលទូទាត់:
-            td ៧ថ្ងៃបន្ទាប់ពីទទួលបានវិក្កយប័ត្រ
-          tr
-            td VAT:
-            td= invoice.vat
-            td  
-            td Terms:
-            td= invoice.contract.terms1
-          tr
-            td Contact:
-            td= invoice.contact
+            td(lang='en')
+              = invoice.customer.en_address2
             td  
             td
-            td= invoice.contract.terms2
+              span(lang='kh') កាលបរិច្ឆេទនៃកិច្ចសន្យា
+              span(lang='en') /Contract Dt. :
+            td(lang='en')
+              = invoice.contract.date
+          tr
+            td(lang='en') C.Code:
+            td(lang='en')
+              = invoice.cCode
+            td  
+            td(lang='kh') រយះពេលទូទាត់ :
+            td(lang='kh') ៧ថ្ងៃបន្ទាប់ពីទទួលបានវិក្កយប័ត្រ
+          tr
+            td(lang='en') VAT:
+            td(lang='en')
+              = invoice.vat
+            td  
+            td(lang='en') Terms :
+            td(lang='en')
+              = invoice.contract.terms1
+          tr
+            td(lang='en') Contact:
+            td(lang='en')
+              = invoice.contact
+            td  
+            td
+            td(lang='en')
+              = invoice.contract.terms2
       section.goods-list
         table.table.table-goods
           tr
-            td លេខរៀង
-            td កូតទំនិញ/សេវា
-            td បរិយាយមុខទំនិញ/សេវា
-            td បរិមាណ
-            td ចំនួនទឺកប្រាក់
+            td(lang='kh') លេខរៀង
+            td(lang='kh') កូតទំនិញ/សេវា
+            td(lang='kh') បរិយាយមុខទំនិញ/សេវា
+            td(lang='kh') បរិមាណ
+            td(lang='kh') ចំនួនទឺកប្រាក់
           tr
-            td Line
-            td Item Code
-            td Item Description
-            td No.of Spot
-            td US$ Amount
+            td(lang='en') Line
+            td(lang='en') Item Code
+            td(lang='en') Item Description
+            td(lang='en') No.of Spot
+            td(lang='en') US$ Amount
           each lineItem in invoice.lineItems
             tr
-              td= lineItem.line
-              td= lineItem.codeItem
-              td= lineItem.description
-              td= lineItem.spot
-              td= lineItem.amount
+              td(lang='en')
+                = lineItem.line
+              td(lang='en')
+                = lineItem.codeItem
+              td(lang='en')
+                = lineItem.description
+              td(lang='en')
+                = lineItem.spot
+              td(lang='en')
+                = lineItem.amount
           - var n = invoice.lineItems.length
           while 30 - n > 0
             tr
@@ -221,46 +266,54 @@ html
               td(colspan='5')  
             tr.summary.sub-total
               td(colspan='2')  
-              td= "សរុបទំព័រទី" + invoice.khmerPageNumber
-              td= "Sub Total Page No. " + invoice.pageNumber + ":"
-              td= invoice.subTotal
+              td
+                span(lang='kh') សរុបទំព័រទី
+                = invoice.khmerPageNumber
+              td(lang='en')
+                = "Sub Total Page No. " + invoice.pageNumber + ":"
+              td(lang='en')
+                = invoice.subTotal
           else
             tr.summary.total
               td(colspan='2')  
-              td សរុប
-              td Total :
-              td= invoice.total
+              td(lang='kh') សរុប
+              td(lang='en') Total :
+              td(lang='en')
+                = invoice.total
             tr.summary.vat
               td(colspan='2')  
-              td អាករលើតម្លៃបន្ថែម ១០%
-              td VAT 10% :
-              td= invoice.vat10
+              td(lang='kh') អាករលើតម្លៃបន្ថែម ១០%
+              td(lang='en') VAT 10% :
+              td(lang='en')
+                = invoice.vat10
             tr.summary.grand-total
               td(colspan='2')  
-              td សរុបរួម
-              td GRAND TOTAL:
-              td= invoice.grandTotal
+              td(lang='kh') សរុបរួម
+              td(lang='en') GRAND TOTAL:
+              td(lang='en')
+                = invoice.grandTotal
       if !invoice.subTotal
         section.footer
           .payment-options
-            p.kh-pay ការទូទាត់អាចធ្វើឡើងតាមមូលឡបទានប័ត្រ ឬ តាមរយៈការទូទាត់នៅធនាគារ
-            p.en-pay Payment can be made by Cheque or Bank Tansfer payable to :
+            p.kh-pay(lang='kh') ការទូទាត់អាចធ្វើឡើងតាមមូលឡបទានប័ត្រ ឬ តាមរយៈការទូទាត់នៅធនាគារ
+            p.en-pay(lang='en') Payment can be made by Cheque or Bank Tansfer payable to :
             ul.account-info
-              li
+              li(lang='en')
                 | Account Name:&nbsp;
                 = invoice.account.name
-              li
+              li(lang='en')
                 | Account No:&nbsp;
                 = invoice.account.number
-              li
+              li(lang='en')
                 | Bank Name:&nbsp;
                 = invoice.account.bank_name
-              li
+              li(lang='en')
                 | SWIFT Code:&nbsp;
                 = invoice.account.swift_code
           .signature
-            p ហត្ថលេខា
-            p Authorized Signature
+            p(lang='kh') ហត្ថលេខា
+            p(lang='en') Authorized Signature
             p.sign-place
+            | ------------------------------
           .clear
 
