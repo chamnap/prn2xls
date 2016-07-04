@@ -96,6 +96,11 @@ var convertPdf = function(prnFile, destinationDirectory, options, callback) {
   var fn           = jade.compile(jadeTemplate);
   var headerFn     = jade.compile(jadeHeaderTemplate);
 
+  // Fonts
+  var woffBase64   = fs.readFileSync(__dirname + '/fonts_base64/woff.txt');
+  var ttfBase64    = fs.readFileSync(__dirname + '/fonts_base64/ttf.txt');
+
+
   var htmlOutput = '';
 
   for(var i = 0; i < invoices.length; i++) {
@@ -107,8 +112,15 @@ var convertPdf = function(prnFile, destinationDirectory, options, callback) {
     wkhtmltopdf.command = 'C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe';
   }
 
-  var result = headerFn().replace('***PLACEHOLDER***', htmlOutput);
+  var obj = {
+    WOFF_BASE64: woffBase64,
+    TTF_BASE64: ttfBase64,
+    PLACEHOLDER: htmlOutput
+  }
 
+  var result = headerFn().replace(/WOFF_BASE64|TTF_BASE64|PLACEHOLDER/gi, function(matched) {
+    return obj[matched];
+  });
 
   wkhtmltopdf(result,
     {
