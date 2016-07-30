@@ -132,8 +132,8 @@ InvoiceParser.prototype = {
         break;
       }
     }
-
     var lineItems = [];
+
     for(var i=start; i<lines.length; i++) {
       var line = lines[i].trim();
       if (line.indexOf('Total  :') != -1 || line.indexOf('Sub Total Page No.') != -1) {
@@ -141,7 +141,16 @@ InvoiceParser.prototype = {
       }
 
       var lineItem = this.parseLineItem(line);
+
       if (lineItem && !this.isBlankLineItem(lineItem)) {
+        // var keys = Object.keys(lineItem);
+
+        // console.log('------line-------');
+        // for (var j = 0; j < keys.length; j++) {
+        //     var val = lineItem[keys[j]];
+        //     console.log(val);
+        // }
+
         lineItems.push(lineItem);
       }
     }
@@ -162,59 +171,36 @@ InvoiceParser.prototype = {
     line       = line.replace(/ {30,}\d+(?:\.\d+)?$/, '');
     var values = line.split(/\s{2,}/);
 
-    if (values.length == 6) {
-      attributes.line         = values[0];
-      attributes.codeItem     = values[1];
-      attributes.description  = values[2];
-      attributes.spot         = values[3];
-      attributes.amount       = values[4];
-    } else if(values.length == 5) {
-      attributes.line         = values[0];
-      attributes.codeItem     = values[1];
-      attributes.description  = values[2];
-      attributes.spot         = values[3];
+    var LINE        = /^\d{1,3}$/;
+    var CODE_ITEM   = /^I[A-Z0-9]+$|^-/;
+    var DESCRIPTION = /(^[a-zA-Z0-9-\s]*)$/g;
+    var SPOT        = /^\d{1,3}$/;
+    var AMOUNT      = /^[0-9,\.]+$/;
 
-      if (values[4].match(/\.|,/)) {
-        attributes.amount = values[4];
-      }
-    } else if (values.length == 4) {
-      if (!isNaN(parseInt(values[0]))) {
-        attributes.line = values[0];
-      }
+    for(var i =0; i < values.length; i++) {
+      var value = values[i];
 
-      if (values[1].indexOf(' ') == -1) {
-        attributes.codeItem = values[1];
-      }
+      if(LINE.test(value) && attributes.line == null) {
+        attributes.line = value.match(LINE)[0];
 
-      if (values[2].indexOf(' ') != -1) {
-        attributes.description = values[2];
-      }
+      } else if (CODE_ITEM.test(value) && attributes.codeItem == null ) {
+        attributes.codeItem = value.match(CODE_ITEM)[0];
 
-      if (!isNaN(parseInt(values[3]))) {
-        attributes.spot = values[3];
-      }
-    } else if (values.length == 3) {
-      if (values[0].indexOf(' ') == -1) {
-        attributes.codeItem = values[0];
-      }
+      } else if (DESCRIPTION.test(value) && !SPOT.test(value)) {
+        var description = value.match(DESCRIPTION)[0];
 
-      if (values[1].indexOf(' ') != -1) {
-        attributes.description = values[1];
-      }
+        if(attributes.description == null) {
+          attributes.description = description;
+        } else {
+          attributes.description = attributes.description + ' ' + description;
+        }
 
-      if (values[2].match(/\.|,/)) {
-        attributes.amount = values[2];
-      }
-    } else if (values.length == 2) {
-      if (values[0] == '-') {
-        attributes.codeItem = values[0];
-      }
+      } else if (SPOT.test(value) && attributes.spot == null) {
+        attributes.spot = value.match(SPOT)[0];
 
-      if (values[1].indexOf(' ') != -1) {
-        attributes.description = values[1];
+      } else if (AMOUNT.test(value) && attributes.amount == null) {
+        attributes.amount = value.match(AMOUNT)[0];
       }
-    } else if (values.length <= 1) {
-      return null;
     }
 
     return attributes;
