@@ -205,6 +205,13 @@ InvoiceParser.prototype = {
       if (values[2].match(/\.|,/)) {
         attributes.amount = values[2];
       }
+
+      // -           Fertilizer Ads July 16
+      if (values[0] == '' && values[1] == '-' && values[2].indexOf(' ') != -1) {
+        attributes.line = null;
+        attributes.codeItem = values[1];
+        attributes.description = values[2];
+      }
     } else if (values.length == 2) {
       if (values[0] == '-') {
         attributes.codeItem = values[0];
