@@ -159,7 +159,7 @@ InvoiceParser.prototype = {
     var attributes = { line: null, codeItem: null, description: null, spot: null, amount: null };
 
     // replace the overflow fields
-    var new_line = line.replace(/ {30,}\d+(?:\.\d+)?$/, '');
+    var new_line = line.replace(/ {30,}\d{1,3}(,\d{3})*(\.\d+)?$/, '');
     var values   = new_line.split(/\s{2,}/);
 
     if (values.length == 6) {
@@ -192,6 +192,19 @@ InvoiceParser.prototype = {
 
       if (!isNaN(parseInt(values[3]))) {
         attributes.spot = values[3];
+      }
+
+      // if above case is false
+      if (!attributes.codeItem) {
+        if (values[0].indexOf(' ') == -1) {
+          attributes.codeItem = values[0];
+        }
+      }
+
+      if (!attributes.description) {
+        if (values[1].indexOf(' ') != -1) {
+          attributes.description = values[1];
+        }
       }
     } else if (values.length == 3) {
       if (values[0].indexOf(' ') == -1) {
